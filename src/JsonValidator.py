@@ -25,21 +25,21 @@ class JsonValidator:
     @staticmethod
     def __validate_type(all_field_schema, json_data):
         for field in json_data:
-            for field_schema in all_field_schema:
-                if field.get('name') == field_schema.get('name'):
-                    types = field_schema.get("types")
-                    value = field.get('value')
-                    for type in types:
-                        if type == "String":
-                            if not isinstance(value, str):
-                                return False
-                        elif type == "Int":
-                            if not isinstance(value, (int)):
-                                return False
-                        elif type == "Boolean":
-                            if not isinstance(value, bool):
-                                return False
-                        elif type == "null":
-                            if value is not None:
-                                return False
+            field_schema = all_field_schema.get(field.get('name'))
+            types = field_schema.get("types")
+            value = field.get('value')
+
+            for type in types:
+                if type == "String":
+                    if not isinstance(value, str):
+                        return False
+                elif type == "Int":
+                    if not isinstance(value, (int)):
+                        return False
+                elif type == "Boolean":
+                    if not isinstance(value, bool):
+                        return False
+                elif type == "null":
+                    if value is not None:
+                        return False
         return True
