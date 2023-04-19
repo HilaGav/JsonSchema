@@ -1,9 +1,10 @@
 import json
+from src.utils import convert_list_to_dictionary_by_field
 
 
 class SchemaHandler:
     def __init__(self):
-        self.MethodAndPathToValue = {}
+        self.EndPointsToValue = {}
 
     """
             indexing method+path to find the appropriate schema without iterating over the array of schemas.
@@ -12,27 +13,27 @@ class SchemaHandler:
     """
     def update_schema(self, schemas_json):
         schemas = json.loads(schemas_json)
-        self.MethodAndPathToValue = {}
+        self.EndPointsToValue = {}
 
         for schema in schemas:
             key = schema.get('method') + schema.get('path')
-            query_params_by_name = self.__convert_list_to_dic_by_field(schema.get('query_params'), 'name')
-            headers_by_name = self.__convert_list_to_dic_by_field(schema.get('headers'), 'name')
-            body_by_name = self.__convert_list_to_dic_by_field(schema.get('body'), 'name')
+            query_params_required = [query_param for query_param in schema.get('query_params') if
+                                     query_param.get('required')]
+            headers_required = [query_param for query_param in schema.get('headers') if query_param.get('required')]
+            body_required = [query_param for query_param in schema.get('body') if query_param.get('required')]
 
-            self.MethodAndPathToValue.update({key: {
-                                                    "query_params": query_params_by_name,
-                                                    "headers": headers_by_name,
-                                                    "body": body_by_name
-                                                    }})
+            query_params_by_name = convert_list_to_dictionary_by_field(schema.get('query_params'), 'name')
+            headers_by_name = convert_list_to_dictionary_by_field(schema.get('headers'), 'name')
+            body_by_name = convert_list_to_dictionary_by_field(schema.get('body'), 'name')
+
+            self.EndPointsToValue.update({key: {
+                "query_params_required": query_params_required,
+                "headers_required": headers_required,
+                "body_required": body_required,
+                "query_params": query_params_by_name,
+                "headers": headers_by_name,
+                "body": body_by_name
+            }})
 
     def get_schema_by_method_and_path(self, method: str, path: str):
-        return self.MethodAndPathToValue[method + path]
-
-    @staticmethod
-    def __convert_list_to_dic_by_field(list: list, field: str):
-        new_dict = {}
-        for item in list:
-            name = item.pop(field)
-            new_dict[name] = item
-        return new_dict
+        return self.EndPointsToValue[method + path]
