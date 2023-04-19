@@ -1,0 +1,12 @@
+[{
+	"path": "/users/create",
+	"method": "POST",
+	"query_params": [],
+	"headers": [],
+	"body": [
+		{
+			"name": "address",
+			"value": "hila"
+		}
+	]
+}]
