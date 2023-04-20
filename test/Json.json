@@ -1,12 +1,25 @@
 [{
-	"path": "/users/create",
-	"method": "POST",
+	"path": "/orders/update",
+	"method": "PATCH",
 	"query_params": [],
-	"headers": [],
+	"headers": [
+			{
+			"name": "Authorization",
+			"value": "Bearer ebb3cbbe938c4776bd22a4ec2ea8b2ca"
+		}
+	],
 	"body": [
 		{
+			"name": "order_id",
+			"value": "46da6390-7c78-4a1c-9efa-7c0396067ce4"
+		},
+		{
 			"name": "address",
-			"value": "hila"
+			"value": "Very New Test Road"
+		},
+		{
+			"name": "order_type",
+			"value": 8
 		}
-	]
-}]
+	]}
+]

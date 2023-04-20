@@ -1,5 +1,6 @@
-from src.JsonValidator import JsonValidator
-from src.SchemaHandler import SchemaHandler
+from src.json_validator import JsonValidator
+from src.schema_handler import SchemaHandler
+from src.types_handler import TypesHandler
 
 
 def test_validate_json():
@@ -41,6 +42,10 @@ def test_validate_json2():
     schema_from_file = open("/Users/Hila/PycharmProjects/SaltAssignment-Hila/test/Models.json", "r")
     schema_handler = SchemaHandler()
     schema_handler.update_schema(schema_from_file.read())
-    assert JsonValidator.validate_json(json_from_file.read(), schema_handler)
+
+    type_handler = TypesHandler()
+    json_validate = JsonValidator(schema_handler, type_handler)
+
+    assert json_validate.validate_json(json_from_file.read())
 
 

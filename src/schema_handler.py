@@ -36,4 +36,4 @@ class SchemaHandler:
             }})
 
     def get_schema_by_method_and_path(self, method: str, path: str):
-        return self.EndPointsToValue[method + path]
+        return self.EndPointsToValue.get(method + path)
