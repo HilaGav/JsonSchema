@@ -8,16 +8,18 @@ class JsonValidator:
     __schema_handler = None
     __type_handler = None
 
+    #TODO: maybe a class that look like json schema
     def __init__(self, schema_handler: SchemaHandler, type_handler: TypesHandler):
         self.__schema_handler = schema_handler
         self.__type_handler = type_handler
 
-    def validate_json(self, json_data):
-        json_datas = json.loads(json_data)
-        return self.__validate(json_datas)
+    def validate_json(self, jsons_to_validate):
+        json_datas = json.loads(jsons_to_validate)
+        return self.__deep_validate(json_datas)
 
-    def __validate(self, json_datas):
+    def __deep_validate(self, json_datas):
         is_valid = False
+        reason_of_fail = {}
         for json_data in json_datas:
             schema = self.__schema_handler.get_schema_by_method_and_path(json_data.get('method'), json_data.get('path'))
 
@@ -26,9 +28,8 @@ class JsonValidator:
                     self.__validate_type(schema.get('body'), json_data.get('body'))):
                 return False
 
-            if not (self.__validate_required_field(schema.get('query_params_required'),
-                                                   json_data.get('query_params')) and
-                    self.__validate_required_field(schema.get('headers_required'), json_data.get('headers'))
+            if not (self.__validate_required_field(schema.get('query_params_required'), json_data.get('query_params'))
+                    and self.__validate_required_field(schema.get('headers_required'), json_data.get('headers'))
                     and self.__validate_required_field(schema.get('body_required'), json_data.get('body'))):
                 return False
 
@@ -39,10 +40,11 @@ class JsonValidator:
 
     @staticmethod
     def __validate_required_field(required_field, json_data):
-        name_to_json_data = convert_list_to_dictionary_by_field(json_data, 'name')
-        for required in required_field:
-            if not name_to_json_data.get(required.get('name')):
-                return False
+        if required_field is not None and len(required_field) is not 0:
+            name_to_json_data = convert_list_to_dictionary_by_field(json_data, 'name')
+            for required in required_field:
+                if not name_to_json_data.get(required.get('name')):
+                    return False
 
         return True
 

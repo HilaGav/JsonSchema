@@ -1,0 +1,24 @@
+[{
+	"method": "GET",
+	"query_params": [
+		{
+			"name": "with_extra_data",
+			"types": ["Boolean"],
+			"required": false
+		},
+		{
+			"name": "user_id",
+			"types": ["String", "UUID"],
+			"required": false
+		}
+	],
+	"headers": [
+		{
+			"name": "Authorization",
+			"types": ["String", "Auth-Token"],
+			"required": true
+		}
+	],
+	"body": []
+}
+]

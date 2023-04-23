@@ -2,6 +2,7 @@ import datetime
 import uuid
 import src.config as config
 import re
+import json
 
 
 class TypesHandler:
@@ -13,12 +14,23 @@ class TypesHandler:
                       "Date": self.is_date,
                       "Email": self.is_email,
                       "UUID": self.is_UUID,
-                      "Auth-Token": self.is_auth_token}
+                      "Auth-Token": self.is_auth_token,
+                      "List": self.is_list}
+
+        self.TypesPrimitive = ["String", "Int", "Boolean", "List"]
 
     def type_validate(self, type, value):
         type_function = self.Types.get(type)
         if type_function is not None:
             return type_function(value)
+        return False
+
+    def type_validate_primitive(self, value):
+        for type_primitive in self.TypesPrimitive:
+            if self.type_validate(type_primitive, value):
+                return True
+        if self.is_object(value):
+            return True
         return False
 
     @staticmethod
@@ -50,16 +62,33 @@ class TypesHandler:
 
     @staticmethod
     def is_email(email):
-        return re.match(config.email_regex, email)
+        return re.match(config.email_regex, str(email)) is not None
 
     @staticmethod
     def is_UUID(uuid_str):
         try:
-            uuid.UUID(uuid_str)
+            uuid.UUID(str(uuid_str))
             return True
         except ValueError:
             return False
 
     @staticmethod
     def is_auth_token(auto_token):
-        return re.match(config.bearer_regex, auto_token)
+        return re.match(config.bearer_regex, str(auto_token)) is not None
+
+    @staticmethod
+    def is_object(object_json):
+        if object_json is not None:
+            if json.dumps(object_json) is not None:
+                return True
+        return False
+
+    def is_list(self, list_fields):
+        if not isinstance(list_fields, list):
+            return False
+        if list_fields is None or len(list_fields) <= 0:
+            return False
+        for field in list_fields:
+            if not self.type_validate_primitive(field):
+                return False
+        return True

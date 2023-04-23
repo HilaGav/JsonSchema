@@ -1,0 +1,12 @@
+[{
+	"path": "/users/info",
+	"method": "GET",
+	"query_params": [
+		{
+			"name": "with_extra_data",
+			"value": false
+		}
+	],
+	"headers": [],
+	"body": []
+}]

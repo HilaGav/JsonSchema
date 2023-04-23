@@ -3,7 +3,7 @@
 	"method": "PATCH",
 	"query_params": [],
 	"headers": [
-			{
+		{
 			"name": "Authorization",
 			"value": "Bearer ebb3cbbe938c4776bd22a4ec2ea8b2ca"
 		}
@@ -19,7 +19,7 @@
 		},
 		{
 			"name": "order_type",
-			"value": 8
+			"value": "type1"
 		}
-	]}
-]
+	]
+}]
