@@ -1,4 +1,4 @@
-def convert_list_to_dictionary_by_field(list: list, field: str):
+def to_dictionary(list: list, field: str):
     new_dict = {}
     for item in list:
         name = item.get(field)

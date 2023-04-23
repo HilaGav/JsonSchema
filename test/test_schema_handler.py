@@ -1,6 +1,4 @@
-from src.json_validator import JsonValidator
 from src.schema_handler import SchemaHandler
-from src.types_handler import TypesHandler
 import unittest
 
 

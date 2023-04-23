@@ -17,20 +17,20 @@ class TypesHandler:
                       "Auth-Token": self.is_auth_token,
                       "List": self.is_list}
 
-        self.TypesPrimitive = ["String", "Int", "Boolean", "List"]
+        self.PrimitiveTypes = ["String", "Int", "Boolean", "List"]
 
-    def type_validate(self, type, value):
-        type_function = self.Types.get(type)
-        if type_function is not None:
-            return type_function(value)
-        return False
+    def validate_type(self, type, value):
+        type_validation = self.Types.get(type)
+        if type_validation is None:
+            return False
+        return type_validation(value)
 
-    def type_validate_primitive(self, value):
-        for type_primitive in self.TypesPrimitive:
-            if self.type_validate(type_primitive, value):
-                return True
+    def validate_primitive_type(self, value):
         if self.is_object(value):
             return True
+        for primitive_type in self.PrimitiveTypes:
+            if self.validate_type(primitive_type, value):
+                return True
         return False
 
     @staticmethod
@@ -47,8 +47,7 @@ class TypesHandler:
 
     @staticmethod
     def is_null(value):
-        if value is not None:
-            return False
+        return value is None
 
     @staticmethod
     def is_date(value):
@@ -78,10 +77,7 @@ class TypesHandler:
 
     @staticmethod
     def is_object(object_json):
-        if object_json is not None:
-            if json.dumps(object_json) is not None:
-                return True
-        return False
+        return object_json is not None and json.dumps(object_json) is not None
 
     def is_list(self, list_fields):
         if not isinstance(list_fields, list):
@@ -89,6 +85,6 @@ class TypesHandler:
         if list_fields is None or len(list_fields) <= 0:
             return False
         for field in list_fields:
-            if not self.type_validate_primitive(field):
+            if not self.validate_primitive_type(field):
                 return False
         return True
