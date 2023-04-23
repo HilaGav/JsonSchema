@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, request, Response
 from src.schema_handler import SchemaHandler
 from src.json_validator import JsonValidator
@@ -25,10 +27,11 @@ def validate_rest_api():
         return Response("Did not find learned model", status=400)
 
     json_to_check = request.get_data()
-    if json_validate.validate_json(json_to_check):
+    reason_of_failed = json_validate.validate_json(json_to_check)
+    if len(reason_of_failed) == 0:
         return Response("Valid!", status=200)
 
-    return Response("Not valid", status=400)
+    return Response(json.dumps(reason_of_failed), status=400)
 
 
 app.run()

@@ -17,11 +17,11 @@ class TestJsonValidation(unittest.TestCase):
     def test_valid_json_return_true(self):
         json_validate = JsonValidator(self.schema_handler, self.type_handler)
 
-        assert json_validate.validate_json(self.valid_json.read())
+        assert len(json_validate.validate_json(self.valid_json.read())) == 0
 
     def test_invalid_json_return_false(self):
         json_validate = JsonValidator(self.schema_handler, self.type_handler)
 
-        assert json_validate.validate_json(self.requird_field_error_json.read()) is False
+        assert len(json_validate.validate_json(self.requird_field_error_json.read())) > 0
 
 

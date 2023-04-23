@@ -5,6 +5,10 @@ from src.utils import convert_list_to_dictionary_by_field
 class SchemaHandler:
     def __init__(self):
         self.EndPointsToValue = {}
+        self.schemaStructuresType = ['headers', 'query_params', 'body']
+        self.schemaStructuresRequired = [{'required': 'query_params_required', 'name': 'query_params'},
+                                         {'required': 'headers_required', 'name': 'headers'},
+                                         {'required': 'body_required', 'name': 'body'}]
 
     """
             indexing method+path to find match schema without iterating over the array of schemas.
